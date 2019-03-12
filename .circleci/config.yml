@@ -1,0 +1,71 @@
+version: 2.1
+executors:
+  docker-executor:
+    environment:
+      IMAGE_NAME: peterevans/smoke-testing-helloworld
+      IMAGE_TAG: latest
+      DOCKERFILE_PATH: .
+    docker:
+      - image: circleci/openjdk:8-stretch
+jobs:
+  build:
+    executor: docker-executor
+    steps:
+      - checkout
+      - restore_cache:
+          key: gradle-{{ checksum "build.gradle.kts" }}
+      - run:
+          name: Build and test
+          command: ./gradlew -q build
+      - save_cache:
+          paths:
+             - ~/.gradle
+          key: gradle-{{ checksum "build.gradle.kts" }}
+      - store_test_results:
+          path: build/test-results/
+      - setup_remote_docker:
+          docker_layer_caching: true
+      - run:
+          name: Build Docker image
+          command: |
+            docker build -t $IMAGE_NAME:$IMAGE_TAG $DOCKERFILE_PATH
+      - run:
+          name: Cache Docker image
+          command: docker save -o $IMAGE_TAG.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./*.tar
+  test:
+    executor: docker-executor
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load cached Docker image
+          command: |
+            docker load -i /tmp/workspace/$IMAGE_TAG.tar
+      - run:
+          name: Smoke test Docker container
+          command: |
+            docker run -d --name smoke-testing-helloworld $IMAGE_NAME:$IMAGE_TAG
+            # Dummy container to store tests
+            #docker create -v /etc/newman --name tests alpine:3.4 /bin/true
+            #docker cp tests/. tests:/etc/newman
+            # Run tests
+            docker run --network container:smoke-testing-helloworld jwilder/dockerize -wait http://localhost:8081/healthcheck -timeout 120s -wait-retry-interval 5s
+            #docker run --network container:smoke-testing-helloworld --volumes-from tests -t postman/newman:4.4.0-alpine run smoke-testing-helloworld.postman_collection.json
+workflows:
+  version: 2
+  build:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+      # Implement to push your container to a repository
+      # - publish:
+      #     requires:
+      #       - test
