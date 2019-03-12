@@ -16,7 +16,7 @@ jobs:
           key: gradle-{{ checksum "build.gradle.kts" }}
       - run:
           name: Build and test
-          command: ./gradlew -q build
+          command: ./gradlew -q build installDist
       - save_cache:
           paths:
              - ~/.gradle
