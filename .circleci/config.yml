@@ -51,12 +51,12 @@ jobs:
           name: Smoke test Docker container
           command: |
             docker run -d --name smoke-testing-helloworld $IMAGE_NAME:$IMAGE_TAG
-            # Dummy container to store tests
-            #docker create -v /etc/newman --name tests alpine:3.4 /bin/true
-            #docker cp tests/. tests:/etc/newman
-            # Run tests
+            # Dummy container to store smoke tests
+            docker create -v /etc/newman --name smoke-tests alpine:3.4 /bin/true
+            docker cp smoke-tests/. smoke-tests:/etc/newman
+            # Run smoke tests
             docker run --network container:smoke-testing-helloworld jwilder/dockerize -wait http://localhost:8081/healthcheck -timeout 120s -wait-retry-interval 5s
-            #docker run --network container:smoke-testing-helloworld --volumes-from tests -t postman/newman:4.4.0-alpine run smoke-testing-helloworld.postman_collection.json
+            docker run --network container:smoke-testing-helloworld --volumes-from smoke-tests -t postman/newman:4.4.0-alpine run smoke-testing-helloworld.postman_collection.json
 workflows:
   version: 2
   build:

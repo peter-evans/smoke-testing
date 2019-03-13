@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "9f7a9aca-9d5f-4476-a880-7f54f0b90db8",
+		"name": "Smoke Testing Helloworld",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/hello-world",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "610932c7-a594-4e00-9278-217b97bcc904",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Content is 'Hello, Stranger!'\", function () {",
+							"   pm.expect(pm.response.json().content).to.equal(\"Hello, Stranger!\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/hello-world",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hello-world"
+					]
+				},
+				"description": "hello-world default response"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/hello-world?name=Smoke%20Tester",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fe75601d-4b7f-45dd-a46b-72cd806f579d",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Content is 'Hello, Smoke Tester!'\", function () {",
+							"   pm.expect(pm.response.json().content).to.equal(\"Hello, Smoke Tester!\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8080/hello-world?name=Smoke%20Tester",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"hello-world"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Smoke%20Tester"
+						}
+					]
+				},
+				"description": "hello-world specified name response"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8081/healthcheck",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "1b7141bf-0a7e-4837-9fa7-1b521eea8d73",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Deadlocks are healthy\", function () {",
+							"   pm.expect(pm.response.json().deadlocks.healthy).to.equal(true);",
+							"});",
+							"pm.test(\"Template is healthy\", function () {",
+							"   pm.expect(pm.response.json().template.healthy).to.equal(true);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8081/healthcheck",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"healthcheck"
+					]
+				},
+				"description": "Healthchecks"
+			},
+			"response": []
+		}
+	]
+}
