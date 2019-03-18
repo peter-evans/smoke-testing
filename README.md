@@ -1,4 +1,4 @@
-# Smoke Testing Containers
+# Smoke Testing Containers [<img align="right" alt="The blog of Peter Evans: Smoke Testing Containers" title="View blog post" src="https://peterevans.dev/img/blog-published-badge.svg">](https://peterevans.dev/posts/smoke-testing-containers/)
 [![CircleCI](https://circleci.com/gh/peter-evans/smoke-testing/tree/master.svg?style=svg)](https://circleci.com/gh/peter-evans/smoke-testing/tree/master)
 
 Smoke testing is a class of testing designed to determine if something is ready for more rigorous testing. The terminology appears to have [originated from plumbing](https://en.wikipedia.org/wiki/Smoke_testing_(mechanical)) where smoke is used to test for leaks in a closed system of pipes. It also seems to be widely used in electronics to refer to the practice of turning on a new piece of hardware for the first time and considering it a success if none of the components overheat and start to smoke.
