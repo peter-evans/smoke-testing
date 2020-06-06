@@ -23,8 +23,7 @@ jobs:
           key: gradle-{{ checksum "build.gradle.kts" }}
       - store_test_results:
           path: build/test-results/
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
       - run:
           name: Build Docker image
           command: |
