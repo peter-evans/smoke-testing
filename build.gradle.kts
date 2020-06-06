@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.3.11"
+    kotlin("jvm") version "1.3.31"
     java
     application
 }
@@ -14,16 +14,20 @@ repositories {
 }
 
 dependencies {
-    val kotlinVersion = "1.3.21"
-    compile(kotlin("stdlib-jdk8", kotlinVersion))
+    val kotlinVersion = "1.3.+"
+    implementation(kotlin("stdlib-jdk8", kotlinVersion))
 
-    val junitVersion = "5.3.2"
+    val junitVersion = "5.3.+"
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-    testCompile(kotlin("test-junit5", kotlinVersion))
+    testImplementation(kotlin("test-junit5", kotlinVersion))
 
-    val dropwizardVersion = "1.3.9"
-    compile("io.dropwizard:dropwizard-core:$dropwizardVersion")
+    val dropwizardVersion = "1.3.+"
+    implementation("io.dropwizard:dropwizard-core:$dropwizardVersion")
+}
+
+dependencyLocking {
+    lockAllConfigurations()
 }
 
 application {
